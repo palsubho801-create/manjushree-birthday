@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #D2D2D2;
+            background-image:
+            repeating-linear-gradient(
+                to right, transparent 0 100px,
+                #25283b22 100px 101px
+            ),
+            repeating-linear-gradient(
+                to bottom, transparent 0 100px,
+                #25283b22 100px 101px
+            );
+        }
+        body::before{
+            position: absolute;
+            width: min(1400px, 90vw);
+            top: 10%;
+            left: 50%;
+            height: 90%;
+            transform: translateX(-50%);
+            content: '';
+            background-image: url(images/bg.png);
+            background-size: 100%;
+            background-repeat: no-repeat;
+            background-position: top center;
+            pointer-events: none;
+        }
+        /* Hide main content before login */
+        #main-content {
+            display: none;
+        }
+        /* Centered floating play button styles */
+        #audio-center-btn {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10000;
+            background: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 80px;
+            height: 80px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+            animation: float 2s infinite ease-in-out;
+        }
+        #audio-center-btn:hover {
+            background: #f0f0f0;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+            transform: translate(-50%, -50%) scale(1.08);
+        }
+        @keyframes float {
+            0%, 100% { box-shadow: 0 4px 16px rgba(0,0,0,0.2); transform: translate(-50%, -50%) scale(1);}
+            50% { box-shadow: 0 12px 32px rgba(0,0,0,0.25); transform: translate(-50%, calc(-50% - 10px)) scale(1.05);}
+        }
+        /* Play icon style */
+        #audio-center-btn::before {
+            content: '';
+            display: inline-block;
+            width: 0;
+            height: 0;
+            border-top: 22px solid transparent;
+            border-bottom: 22px solid transparent;
+            border-left: 36px solid #25283b;
+            margin-left: 6px;
+        }
+        /* Login page styles */
+        #login-page {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 20000;
+        }
+        #login-form {
+            background: #fff;
+            padding: 2.5rem 2rem 2rem 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+            display: flex;
+            flex-direction: column;
+            min-width: 320px;
+            align-items: center;
+            animation: fadeIn 0.7s;
+        }
+        #login-form h2 {
+            margin-bottom: 0.5rem;
+            color: #e67e22;
+            font-size: 2rem;
+            text-align: center;
+        }
+        #login-form .subtitle {
+            color: #25283b;
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        #login-form input {
+            width: 90%;
+            padding: 0.7rem 1rem;
+            margin-bottom: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+        #login-form button {
+            width: 100%;
+            padding: 0.7rem;
+            background: #25283b;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        #login-form button:hover {
+            background: #44476a;
+        }
+        #login-error {
+            color: #e74c3c;
+            margin-bottom: 1rem;
+            display: none;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95);}
+            to { opacity: 1; transform: scale(1);}
+        }
+    </style>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Login Page Overlay -->
+    <div id="login-page">
+        <form id="login-form" autocomplete="off" onsubmit="return false;">
+            <h2>🎉 Happy Birthday Manjushree! 🎉</h2>
+            <div class="subtitle">Login to see the gift</div>
+            <div id="login-error">Invalid username or password</div>
+            <input type="text" id="login-username" placeholder="Enter your birthday (e.g DDMMYYYY-01012025)" required autofocus>
+            <input type="password" id="login-password" placeholder="Enter his birthday (e.g DDMMYYYY-01012025)" required>
+            <button type="submit">Login</button>
+        </form>
+    </div>
+
+    <!-- Main content, hidden before login -->
+    <div id="main-content">
+        <!-- Centered floating play button -->
+        <button id="audio-center-btn" title="Tap to play music"></button>
+        <audio id="bg-audio" loop src="images/audio.mpeg"></audio>
+
+        <div class="banner">
+            <div class="slider" style="--quantity: 10">
+                <div class="item" style="--position: 2"><img src="images/pic_1.jpeg" alt=""></div>
+                <div class="item" style="--position: 1"><img src="images/pic_2.jpeg" alt=""></div>
+                <div class="item" style="--position: 3"><img src="images/pic_3.jpeg" alt=""></div>
+                <div class="item" style="--position: 4"><img src="images/pic_4.jpeg" alt=""></div>
+                <div class="item" style="--position: 5"><img src="images/pic_5.jpeg" alt=""></div>
+                <div class="item" style="--position: 6"><img src="images/pic_6.jpeg" alt=""></div>
+                <div class="item" style="--position: 7"><img src="images/pic_7.jpeg" alt=""></div>
+                <div class="item" style="--position: 8"><img src="images/pic_8.jpeg" alt=""></div>
+                <div class="item" style="--position: 9"><img src="images/pic_9.jpeg" alt=""></div>
+                <div class="item" style="--position: 10"><img src="images/pic_10.jpeg" alt=""></div>
+            </div>
+            <div class="content">
+                <div class="author">
+                    <h2>DEAR</h2>
+                    <p><b>Manjushree</b></p>
+                    <p>
+                        Happy Birthday to you. May all your dreams come true. Wishing a year filled with Love, Joy, and Surprices.- from Subhankar.
+                    </p>
+                </div>
+                <div class="model"></div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const loginPage = document.getElementById('login-page');
+        const loginForm = document.getElementById('login-form');
+        const loginError = document.getElementById('login-error');
+        const mainContent = document.getElementById('main-content');
+        loginForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const username = document.getElementById('login-username').value.trim();
+            const password = document.getElementById('login-password').value;
+            if(username === '04102004' && password === '19112004') {
+                loginPage.style.display = 'none';
+                mainContent.style.display = 'block';
+            } else {
+                loginError.style.display = 'block';
+            }
+        });
+
+        // Play button logic
+        const audioBtn = document.getElementById('audio-center-btn');
+        const audio = document.getElementById('bg-audio');
+        audioBtn.addEventListener('click', function() {
+            audio.play();
+            audioBtn.style.display = 'none';
+        });
+    </script>
+</body>
+</html>
